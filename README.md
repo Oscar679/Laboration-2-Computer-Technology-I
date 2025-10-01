@@ -109,3 +109,6 @@ loop:   MOV	R0, #LED_PIN1
 	B       loop
 
 ```
+
+## Task 3 - Binary counter
+# Output
