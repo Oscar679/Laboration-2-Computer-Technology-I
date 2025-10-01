@@ -112,3 +112,5 @@ loop:   MOV	R0, #LED_PIN1
 
 ## Task 3 - Binary counter
 # Output
+**Link to Google Drive due to file exceeding accepted size**
+https://drive.google.com/file/d/1TvsntBlSTeEqIup9cvoACHtylR23L0ED/view?usp=drive_link
