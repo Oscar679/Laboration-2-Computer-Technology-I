@@ -4,7 +4,7 @@
   - **My name and LNU credentials:** Oscar Ekberg, oe222ia
   - **Examiner of this report**: Daniel Lundberg
 
-## Task 1
+## Task 1 - Hello World loop
 # Minicom output
 <img width="650" height="442" alt="image" src="https://github.com/user-attachments/assets/7f71df8f-03cc-4320-bb05-b09e126e09d5" />
 
@@ -38,5 +38,74 @@ loop:
 .data
 	       .align  4	@ necessary alignment
 helloworld: .asciz   "Hello World %d\n"
+
+```
+
+## Task 2 - Traffic light
+# Output
+https://github.com/user-attachments/assets/a4c00085-14e7-4cb0-b4df-dd693df4b2ac
+
+# Source code
+```assembly
+@
+@ Assembler program to flash three LEDs connected to the
+@ Raspberry Pi Pico GPIO port using the Pico SDK.
+@
+
+	.EQU	LED_PIN1, 0
+	.EQU	LED_PIN2, 1
+	.EQU	LED_PIN3, 2
+	.EQU	GPIO_OUT, 1
+	.EQU	sleep_time, 200
+
+.thumb_func	@ Necessary because sdk uses BLX
+.global main    @ Provide program starting address
+
+main:
+	BL stdio_init_all @ enable USB serial
+	
+	MOV	R0, #LED_PIN1
+	BL	gpio_init
+	MOV	R0, #LED_PIN1
+	MOV	R1, #GPIO_OUT
+	BL	link_gpio_set_dir
+	
+	MOV	R0, #LED_PIN2
+	BL	gpio_init
+	MOV	R0, #LED_PIN2
+	MOV	R1, #GPIO_OUT
+	BL	link_gpio_set_dir
+	
+	MOV	R0, #LED_PIN3
+	BL	gpio_init
+	MOV	R0, #LED_PIN3
+	MOV	R1, #GPIO_OUT
+	BL	link_gpio_set_dir
+	
+loop:   MOV	R0, #LED_PIN1
+	MOV	R1, #1
+	BL	link_gpio_put
+	LDR	R0, =sleep_time
+	BL	sleep_ms
+	MOV	R0, #LED_PIN1
+	MOV	R1, #0
+	BL	link_gpio_put
+	MOV	R0, #LED_PIN2
+	MOV	R1, #1
+	BL	link_gpio_put
+	LDR	R0, =sleep_time
+	BL	sleep_ms
+	MOV	R0, #LED_PIN2
+	MOV	R1, #0
+	BL	link_gpio_put
+	MOV	R0, #LED_PIN3
+	MOV	R1, #1
+	BL	link_gpio_put
+	LDR	R0, =sleep_time
+	BL	sleep_ms
+	MOV	R0, #LED_PIN3
+	MOV	R1, #0
+	BL	link_gpio_put
+	B       loop
 
 ```
