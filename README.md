@@ -113,4 +113,262 @@ loop:   MOV	R0, #LED_PIN1
 ## Task 3 - Binary counter
 # Output
 **Link to Google Drive due to file exceeding accepted size**
+
 https://drive.google.com/file/d/1TvsntBlSTeEqIup9cvoACHtylR23L0ED/view?usp=drive_link
+
+# Source code
+```assembly
+@
+@ Assembler program to flash three LEDs that count in binary form from 0 to 7 and then from 7 to 0 infinitely
+@ Raspberry Pi Pico GPIO port using the Pico SDK.
+@
+
+	.EQU	LED_PIN1, 0 @green
+	.EQU	LED_PIN2, 1 @yellow
+	.EQU	LED_PIN3, 2 @red
+	.EQU	GPIO_OUT, 1
+	.EQU	sleep_time, 1000
+
+.thumb_func	@ Necessary because sdk uses BLX
+.global main    @ Provide program starting address
+
+main:
+	BL stdio_init_all @ enable USB serial
+@Initializing LEDs
+	MOV	R0, #LED_PIN1
+	BL	gpio_init
+	MOV	R0, #LED_PIN1
+	MOV	R1, #GPIO_OUT
+	BL	link_gpio_set_dir
+	
+	MOV	R0, #LED_PIN2
+	BL	gpio_init
+	MOV	R0, #LED_PIN2
+	MOV	R1, #GPIO_OUT
+	BL	link_gpio_set_dir
+	
+	MOV	R0, #LED_PIN3
+	BL	gpio_init
+	MOV	R0, #LED_PIN3
+	MOV	R1, #GPIO_OUT
+	BL	link_gpio_set_dir
+
+@making sure all LEDs are off before initializing loop
+	MOV R0, #LED_PIN1
+    MOV R1, #0
+    BL link_gpio_put
+
+    MOV R0, #LED_PIN2
+    MOV R1, #0
+    BL link_gpio_put
+
+    MOV R0, #LED_PIN3
+    MOV R1, #0
+    BL link_gpio_put
+
+loop:
+@Counting from 0 to 7
+@0
+	MOV R0, #LED_PIN1
+	MOV R1, #0
+	BL link_gpio_put
+	LDR R0, =sleep_time
+	BL sleep_ms
+@1
+	MOV R0, #LED_PIN1
+	MOV R1, #1
+	BL link_gpio_put
+	LDR R0, =sleep_time
+	BL sleep_ms
+	
+	MOV R0, #LED_PIN1
+	MOV R1, #0
+	BL link_gpio_put
+@2
+	MOV R0, #LED_PIN2
+	MOV R1, #1
+	BL link_gpio_put
+	LDR R0, =sleep_time
+	BL sleep_ms
+	
+	MOV R0, #LED_PIN2
+	MOV R1, #0
+	BL link_gpio_put
+@3
+	MOV R0, #LED_PIN1
+	MOV R1, #1
+	BL link_gpio_put
+	
+	MOV R0, #LED_PIN2
+	MOV R1, #1
+	BL link_gpio_put
+	LDR R0, =sleep_time
+	BL sleep_ms
+	
+	MOV R0, #LED_PIN1
+	MOV R1, #0
+	BL link_gpio_put
+	
+	MOV R0, #LED_PIN2
+	MOV R1, #0
+	BL link_gpio_put
+@4
+	MOV R0, #LED_PIN3
+	MOV R1, #1
+	BL link_gpio_put
+	LDR R0, =sleep_time
+	BL sleep_ms
+	
+	MOV R0, #LED_PIN3
+	MOV R1, #0
+@5
+	MOV R0, #LED_PIN1
+	MOV R1, #1
+	BL link_gpio_put
+	
+	MOV R0, #LED_PIN3
+	MOV R1, #1
+	BL link_gpio_put
+	LDR R0, =sleep_time
+	BL sleep_ms
+	
+	MOV R0, #LED_PIN1
+	MOV R1, #0
+	BL link_gpio_put
+	
+	MOV R0, #LED_PIN3
+	MOV R1, #0
+	BL link_gpio_put
+@6
+	MOV R0, #LED_PIN2
+	MOV R1, #1
+	BL link_gpio_put
+	
+	MOV R0, #LED_PIN3
+	MOV R1, #1
+	BL link_gpio_put
+	LDR R0, =sleep_time
+	BL sleep_ms
+	
+	MOV R0, #LED_PIN2
+	MOV R1, #0
+	BL link_gpio_put
+	
+	MOV R0, #LED_PIN3
+	MOV R1, #0
+	BL link_gpio_put
+@7
+	MOV R0, #LED_PIN1
+	MOV R1, #1
+	BL link_gpio_put
+	
+	MOV R0, #LED_PIN2
+	MOV R1, #1
+	BL link_gpio_put
+	
+	MOV R0, #LED_PIN3
+	MOV R1, #1
+	BL link_gpio_put
+	LDR R0, =sleep_time
+	BL sleep_ms
+	
+	MOV R0, #LED_PIN1
+	MOV R1, #0
+	BL link_gpio_put
+	
+	MOV R0, #LED_PIN2
+	MOV R1, #0
+	BL link_gpio_put
+	
+	MOV R0, #LED_PIN3
+	MOV R1, #0
+	BL link_gpio_put
+
+@Now counting from 7 to 0
+
+@6
+	MOV R0, #LED_PIN2
+	MOV R1, #1
+	BL link_gpio_put
+	
+	MOV R0, #LED_PIN3
+	MOV R1, #1
+	BL link_gpio_put
+	LDR R0, =sleep_time
+	BL sleep_ms
+	
+	MOV R0, #LED_PIN2
+	MOV R1, #0
+	BL link_gpio_put
+	
+	MOV R0, #LED_PIN3
+	MOV R1, #0
+	BL link_gpio_put
+@5
+	MOV R0, #LED_PIN1
+	MOV R1, #1
+	BL link_gpio_put
+	
+	MOV R0, #LED_PIN3
+	MOV R1, #1
+	BL link_gpio_put
+	LDR R0, =sleep_time
+	BL sleep_ms
+	
+	MOV R0, #LED_PIN1
+	MOV R1, #0
+	BL link_gpio_put
+	
+	MOV R0, #LED_PIN3
+	MOV R1, #0
+	BL link_gpio_put
+@4
+	MOV R0, #LED_PIN3
+	MOV R1, #1
+	BL link_gpio_put
+	LDR R0, =sleep_time
+	BL sleep_ms
+	
+	MOV R0, #LED_PIN3
+	MOV R1, #0
+	BL link_gpio_put
+@3
+	MOV R0, #LED_PIN1
+	MOV R1, #1
+	BL link_gpio_put
+	
+	MOV R0, #LED_PIN2
+	MOV R1, #1
+	BL link_gpio_put
+	LDR R0, =sleep_time
+	BL sleep_ms
+	
+	MOV R0, #LED_PIN1
+	MOV R1, #0
+	BL link_gpio_put
+	
+	MOV R0, #LED_PIN2
+	MOV R1, #0
+	BL link_gpio_put
+@2
+	MOV R0, #LED_PIN2
+	MOV R1, #1
+	BL link_gpio_put
+	LDR R0, =sleep_time
+	BL sleep_ms
+	
+	MOV R0, #LED_PIN2
+	MOV R1, #0
+	BL link_gpio_put
+@1
+	MOV R0, #LED_PIN1
+	MOV R1, #1
+	BL link_gpio_put
+	LDR R0, =sleep_time
+	BL sleep_ms
+	
+	MOV R0, #LED_PIN1
+	MOV R1, #0
+	BL link_gpio_put
+	B 		loop
+```
