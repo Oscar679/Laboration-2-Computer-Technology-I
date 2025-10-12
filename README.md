@@ -64,11 +64,11 @@ https://github.com/user-attachments/assets/a4c00085-14e7-4cb0-b4df-dd693df4b2ac
 main:
 	BL stdio_init_all @ enable USB serial
 	
+	MOV	R0, #LED_PIN1 @ Puts the LED_PIN1 varaible in to R0, the parameter
+	BL	gpio_init @ Initializes pin
 	MOV	R0, #LED_PIN1
-	BL	gpio_init
-	MOV	R0, #LED_PIN1
-	MOV	R1, #GPIO_OUT
-	BL	link_gpio_set_dir
+	MOV	R1, #GPIO_OUT @ Puts the GPIO_OUT variable in to R1, the second parameter
+	BL	link_gpio_set_dir @ Calls the externally imported C function
 	
 	MOV	R0, #LED_PIN2
 	BL	gpio_init
@@ -82,11 +82,12 @@ main:
 	MOV	R1, #GPIO_OUT
 	BL	link_gpio_set_dir
 	
-loop:   MOV	R0, #LED_PIN1
-	MOV	R1, #1
-	BL	link_gpio_put
-	LDR	R0, =sleep_time
-	BL	sleep_ms
+loop:
+	MOV	R0, #LED_PIN1
+	MOV	R1, #1 @ Assigns the value 1 to Register 1 (R1)
+	BL	link_gpio_put @ Calls the C function
+	LDR	R0, =sleep_time @ Loads the value which the program will sleep
+	BL	sleep_ms @ Program sleeps for 200ms
 	MOV	R0, #LED_PIN1
 	MOV	R1, #0
 	BL	link_gpio_put
@@ -106,7 +107,7 @@ loop:   MOV	R0, #LED_PIN1
 	MOV	R0, #LED_PIN3
 	MOV	R1, #0
 	BL	link_gpio_put
-	B       loop
+	B       loop @ Loop continues infinitely
 
 ```
 
@@ -153,7 +154,7 @@ main:
 	MOV	R1, #GPIO_OUT
 	BL	link_gpio_set_dir
 
-@making sure all LEDs are off before initializing loop
+@ Making sure all LEDs are off before initializing loop
 	MOV R0, #LED_PIN1
     MOV R1, #0
     BL link_gpio_put
