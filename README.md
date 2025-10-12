@@ -449,10 +449,10 @@ main:
 
 loop:	
 @0
-	MOV R0, #63
-	BL link_gpio_put_all
-	LDR R0, =sleep_time
-	BL sleep_ms
+	MOV R0, #63 @ Puts the value 64 in to Register 0 (R0)
+	BL link_gpio_put_all @ Lights the segments for displaying 0
+	LDR R0, =sleep_time @ The sleep value is loaded in to Register R0
+	BL sleep_ms @ Program sleeps
 @1
 @0000110
 	MOV R0, #6
